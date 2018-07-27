@@ -12,6 +12,8 @@ const config = require('yargs')
     telegramBotToken: { demandOption: true },
     twitterScreenName: { demandOption: true },
     redisUrl: { demandOption: isProduction, default: process.env.REDIS_URL },
+    twitterConsumerKey: { demandOption: true },
+    twitterConsumerSecret: { demandOption: true },
   }).argv;
 
 const redis = require('redis');
@@ -21,8 +23,6 @@ const redisClient = redis.createClient(config.redisUrl);
 const twitter = new Twitter({
   consumer_key: config.twitterConsumerKey,
   consumer_secret: config.twitterConsumerSecret,
-  access_token_key: config.twitterAccessToken,
-  access_token_secret: config.twitterAccessTokenSecret,
 });
 
 const bot = new Telegraf(config.telegramBotToken);
