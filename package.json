@@ -1,0 +1,45 @@
+{
+  "name": "twitter-to-telegram",
+  "version": "1.0.0",
+  "description": "Relay tweets to Telegram",
+  "scripts": {
+    "start": "node -r panik -r dotenv/config index.js",
+    "watch": "nodemon -x 'npm start'",
+    "heroku:logs": "heroku logs --tail"
+  },
+  "keywords": [
+    "telegram",
+    "twitter",
+    "bot",
+    "relay",
+    "forward"
+  ],
+  "author": "Andreas Brekken <andreas@brekken.com>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abrkn/twitter-to-telegram.git"
+  },
+  "bugs": {
+    "url": "https://github.com/abrkn/twitter-to-telegram/issues"
+  },
+  "homepage": "https://github.com/abrkn/twitter-to-telegram#readme",
+  "dependencies": {
+    "bluebird": "3.5.1",
+    "delay": "3.0.0",
+    "dotenv": "6.0.0",
+    "panik": "1.0.1",
+    "redis": "2.8.0",
+    "shutin": "1.1.0",
+    "telegraf": "3.22.1",
+    "twitter": "1.7.1",
+    "yargs": "12.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "1.18.3"
+  },
+  "engines": {
+    "nodejs": "~9.9.0",
+    "npm": "~6.1.0"
+  }
+}
