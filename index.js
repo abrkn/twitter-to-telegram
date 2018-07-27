@@ -11,7 +11,7 @@ const config = require('yargs')
     telegramChatId: { demandOption: true },
     telegramBotToken: { demandOption: true },
     twitterScreenName: { demandOption: true },
-    redisUrl: { demandOption: isProduction },
+    redisUrl: { demandOption: isProduction, default: process.env.REDIS_URL },
   }).argv;
 
 const redis = require('redis');
