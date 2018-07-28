@@ -52,7 +52,7 @@ async function main() {
     if (sinceId) {
       for (const tweet of tweets) {
         // Stop relaying once the most recently relayed tweet is reached
-        if (tweet.id_str === sinceId) {
+        if (tweet.id <= +sinceId) {
           break;
         }
 
