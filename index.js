@@ -4,6 +4,9 @@ const { delayUnlessShutdown } = require('shutin');
 const { promisifyAll } = require('bluebird');
 const isProduction = process.env.NODE_ENV === 'production';
 
+// "because the count parameter retrieves that many Tweets before filtering out retweets and replies."
+const MAX_TWEET_COUNT = 1000;
+
 const config = require('yargs')
   .env('TTT')
   .options({
@@ -50,7 +53,7 @@ async function main() {
       exclude_replies: true,
       include_rts: false,
       ...(sinceId ? { since_id: sinceId } : {}),
-      count: 1000,
+      count: MAX_TWEET_COUNT,
     });
 
     if (sinceId) {
