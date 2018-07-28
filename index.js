@@ -37,6 +37,8 @@ const redisKeyPrefix = [
   config.telegramChatId,
 ].join('_');
 
+const storeSinceId = _ => redisClient.setAsync(`${redisKeyPrefix}:sinceId`, _);
+
 async function main() {
   bot.startPolling();
 
@@ -45,15 +47,17 @@ async function main() {
 
     const tweets = await twitter.get('statuses/user_timeline', {
       screen_name: config.twitterScreenName,
+      exclude_replies: true,
+      include_rts: false,
       ...(sinceId ? { since_id: sinceId } : {}),
-      count: 10,
+      count: 1000,
     });
 
     if (sinceId) {
-      for (const tweet of tweets) {
+      for (const tweet of tweets.slice().reverse()) {
         // Stop relaying once the most recently relayed tweet is reached
         if (tweet.id <= +sinceId) {
-          break;
+          continue;
         }
 
         await bot.telegram.sendMessage(
@@ -66,16 +70,15 @@ async function main() {
           ].join('\n'),
           { parse_mode: 'Markdown' }
         );
+
+        await storeSinceId(tweet.id_str);
       }
-    }
+    } else {
+      const [mostRecentTweet] = tweets;
 
-    const [mostRecentTweet] = tweets;
-
-    if (mostRecentTweet) {
-      await redisClient.setAsync(
-        `${redisKeyPrefix}:sinceId`,
-        mostRecentTweet.id_str
-      );
+      if (mostRecentTweet) {
+        await storeSinceId(mostRecentTweet.id_str);
+      }
     }
   } while (!(await delayUnlessShutdown(config.interval * 1000)));
 }
